@@ -1,1 +1,0 @@
-# skangmy.github.io

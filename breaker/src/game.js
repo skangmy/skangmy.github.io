@@ -25,7 +25,8 @@ export default class Game {
     this.ball = new Ball(this);
     this.gameObjects = [];
     this.bricks = [];
-  
+    
+    this.score = 0;  
     this.lives = 3;
     this.levels = levels;
     this.currentLevel = 0;
@@ -69,11 +70,20 @@ export default class Game {
       return;
     }
 
+
     [...this.gameObjects, ...this.bricks].forEach(obj => obj.update(deltaTime));
+    let bricksBefore = this.bricks.length;
     this.bricks = this.bricks.filter(brick => !brick.markedForDeletion);
+
+    // calculate score
+    this.score += bricksBefore - this.bricks.length;
 
     if(this.bricks.length === 0) {
       this.currentLevel++;
+
+      // add one live when complete a level
+      this.lives++;
+      
       if (this.currentLevel < this.levels.length) {
         this.gameState = GAME_STATE.NEWLEVEL;
         this.start();
@@ -123,12 +133,16 @@ export default class Game {
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
       ctx.fillText('YOU WIN!', this.gameWidth / 2, this.gameHeight / 2); 
-    } else if (this.gameState === GAME_STATE.RUNNING) {
+    } else if (this.gameState === GAME_STATE.RUNNING || this.gameState === GAME_STATE.LAUNCH) {
       console.log('LEVEL ' + this.currentLevel)
       ctx.font = '16px Arial';
       ctx.fillStyle = 'white';
       ctx.textAlign = 'left';
       ctx.fillText('Level ' + (this.currentLevel + 1), 5, 20); 
+
+      ctx.textAlign = 'center';
+      ctx.fillText('Score: ' + this.score, this.gameWidth / 2, 20); 
+
 
       for(let i = 0; i < this.lives; i++) {
         ctx.drawImage(
