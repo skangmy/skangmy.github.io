@@ -21,12 +21,16 @@ export default class Brick {
     let collision = detectCollisionNew(this.game.ball, this);   
     //console.log(collision);
     if(collision.isTop || collision.isBottom) {
-      this.game.ball.speed.y = -this.game.ball.speed.y;
+      if (this.game.ball.star <= 0) {
+        this.game.ball.speed.y = -this.game.ball.speed.y;
+      }
       this.markedForDeletion = true
     }
     
     if(collision.isLeft || collision.isRight) {
-      this.game.ball.speed.x = -this.game.ball.speed.x;
+      if (this.game.ball.star <= 0) {
+        this.game.ball.speed.x = -this.game.ball.speed.x;
+      }
       this.markedForDeletion = true
     }
   } 
