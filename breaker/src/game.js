@@ -17,7 +17,12 @@ const GAME_STATE = {
 
 export default class Game {
   constructor(gameWidth, gameHeight) {
-    this.powerUps = ['live', 'star'];
+    this.powerUps = [
+      'live', 
+      'star', 
+      'expand',
+      'speed',
+    ];
     this.gameWidth = gameWidth;
     this.gameHeight = gameHeight;    
 
@@ -68,7 +73,14 @@ export default class Game {
     ];
     
     this.gameState = GAME_STATE.LAUNCH;
-    
+
+    // setTimeout(() => {
+    //   // this.paddle.expand()
+    //   this.paddle.speedUp();
+    //   setTimeout(() => {
+    //     this.paddle.speedUpTime = 0;
+    //   }, 10000);
+    // }, 5000);
   }
 
   update(deltaTime) {
@@ -128,6 +140,12 @@ export default class Game {
             break;
           case 'star':
             this.ball.startStar();
+            break;
+          case 'expand':
+            this.paddle.expand();
+            break;
+          case 'speed':
+            this.paddle.speedUp();
             break;
         }
       }
@@ -235,6 +253,7 @@ export default class Game {
     this.lives--;
     this.gameState = GAME_STATE.LAUNCH;
     this.ball.star = 0;
+    this.paddle.reset();
     if (this.lives < 5 && this.powerUps.indexOf('live') < 0) {
       this.powerUps.push('live');
     }
